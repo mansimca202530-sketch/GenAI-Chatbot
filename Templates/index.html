@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chat Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="app-container">
+
+
+    <!-- ==================================================
+         SIDEBAR
+    =================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <h1>AI Assistant</h1>
+
+                <span>
+                    Smart • Simple • Powerful
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW CHAT -->
+
+        <button
+            class="new-chat-btn"
+            onclick="newChat()">
+
+            <span>＋</span>
+
+            New Conversation
+
+        </button>
+
+
+        <!-- ==================================================
+             AI MODELS
+        =================================================== -->
+
+        <div class="sidebar-section">
+
+            <p class="section-title">
+                AI MODELS
+            </p>
+
+
+            <!-- LLAMA -->
+
+            <button
+                class="model-card active"
+                data-model="llama"
+                onclick="selectModel('llama')">
+
+                <div class="model-icon llama">
+                    🦙
+                </div>
+
+
+                <div class="model-info">
+
+                    <strong>
+                        LLaMA 3.2
+                    </strong>
+
+                    <small>
+                        General AI Assistant
+                    </small>
+
+                </div>
+
+
+                <span class="check">
+                    ✓
+                </span>
+
+            </button>
+
+
+            <!-- DEEPSEEK -->
+
+            <button
+                class="model-card"
+                data-model="deepseek"
+                onclick="selectModel('deepseek')">
+
+                <div class="model-icon deepseek">
+                    ◈
+                </div>
+
+
+                <div class="model-info">
+
+                    <strong>
+                        DeepSeek V3
+                    </strong>
+
+                    <small>
+                        Advanced AI Reasoning
+                    </small>
+
+                </div>
+
+
+                <span class="check">
+                    ✓
+                </span>
+
+            </button>
+
+
+            <!-- PDF -->
+
+            <button
+                class="model-card"
+                data-model="pdf"
+                onclick="selectModel('pdf')">
+
+                <div class="model-icon pdf">
+                    📄
+                </div>
+
+
+                <div class="model-info">
+
+                    <strong>
+                        PDF Assistant
+                    </strong>
+
+                    <small>
+                        Ask questions from PDF
+                    </small>
+
+                </div>
+
+
+                <span class="check">
+                    ✓
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             PDF UPLOAD
+        =================================================== -->
+
+        <div
+            class="pdf-panel"
+            id="pdfPanel">
+
+
+            <div class="pdf-header">
+
+                <span>
+                    📎
+                </span>
+
+                <strong>
+                    PDF Document
+                </strong>
+
+            </div>
+
+
+            <label class="upload-box">
+
+                <input
+                    type="file"
+                    id="pdfFile"
+                    accept=".pdf"
+                    onchange="uploadPDF()">
+
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+
+                <span>
+                    Upload PDF
+                </span>
+
+
+                <small>
+                    PDF files only
+                </small>
+
+            </label>
+
+
+            <div
+                id="fileStatus"
+                class="file-status">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SIDEBAR FOOTER -->
+
+        <div class="sidebar-footer">
+
+            <div class="status-dot"></div>
+
+            <span>
+                AI services ready
+            </span>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ==================================================
+         MAIN CHAT AREA
+    =================================================== -->
+
+    <main class="chat-area">
+
+
+        <!-- ==================================================
+             TOP BAR
+        =================================================== -->
+
+        <header class="topbar">
+
+
+            <div class="topbar-left">
+
+
+                <button
+                    class="mobile-menu"
+                    onclick="toggleSidebar()">
+
+                    ☰
+
+                </button>
+
+
+                <div>
+
+                    <h2 id="chatTitle">
+                        LLaMA 3.2 Assistant
+                    </h2>
+
+
+                    <div class="online-status">
+
+                        <span></span>
+
+                        Online
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="topbar-actions">
+
+                <button
+                    onclick="clearChat()"
+                    title="Clear conversation">
+
+                    🗑
+
+                </button>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- ==================================================
+             CHAT MESSAGES
+        =================================================== -->
+
+        <section
+            class="chat-messages"
+            id="chatMessages">
+
+
+            <!-- WELCOME -->
+
+            <div
+                class="welcome-message"
+                id="welcomeMessage">
+
+
+                <div class="welcome-icon">
+                    ✨
+                </div>
+
+
+                <h2>
+                    How can I help you today?
+                </h2>
+
+
+                <p>
+                    Ask a question, explore an idea,
+                    or upload a PDF to get started.
+                </p>
+
+
+
+                <!-- SUGGESTIONS -->
+
+                <div class="suggestion-grid">
+
+
+                    <button
+                        onclick="useSuggestion(
+                            'Explain what RAG is in simple words'
+                        )">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Learn something
+                            </strong>
+
+                            <small>
+                                Explain RAG in simple words
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button
+                        onclick="useSuggestion(
+                            'What are the main features of an AI chatbot?'
+                        )">
+
+                        <span>
+                            🤖
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                AI concepts
+                            </strong>
+
+                            <small>
+                                Explore AI chatbot features
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button
+                        onclick="useSuggestion(
+                            'Give me 5 ideas for a college project'
+                        )">
+
+                        <span>
+                            🚀
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Get ideas
+                            </strong>
+
+                            <small>
+                                Find project ideas
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button
+                        onclick="selectModel('pdf')">
+
+                        <span>
+                            📄
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Ask my PDF
+                            </strong>
+
+                            <small>
+                                Upload and analyze a document
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==================================================
+             INPUT AREA
+        =================================================== -->
+
+        <div class="input-wrapper">
+
+
+            <div class="input-box">
+
+
+                <!-- ATTACH -->
+
+                <button
+                    class="attach-btn"
+                    onclick="openPDFSelector()"
+                    title="Attach PDF">
+
+                    📎
+
+                </button>
+
+
+                <!-- MESSAGE -->
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    placeholder="Message your AI assistant..."
+                    onkeydown="handleKeyDown(event)"
+                    oninput="autoResize(this)">
+                </textarea>
+
+
+                <!-- SEND -->
+
+                <button
+                    class="send-btn"
+                    id="sendButton"
+                    onclick="sendMessage()">
+
+                    <span>
+                        ➤
+                    </span>
+
+                </button>
+
+
+            </div>
+
+
+            <div class="input-footer">
+
+                <span>
+                    AI can make mistakes.
+                    Check important information.
+                </span>
+
+
+                <span id="currentModel">
+                    LLaMA 3.2
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+langchain
+langchain-community
+langchain-text-splitters
+langchain-ollama
+chromadb
+sentence-transformers
+pypdf
+python-docx
+unstructured
+pandas
+openpyxl
+huggingface_hub
+ollama
